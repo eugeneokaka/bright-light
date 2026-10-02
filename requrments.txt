@@ -1,0 +1,2027 @@
+You are a senior full-stack web developer, UI/UX designer, real-estate technology architect, SEO specialist, and conversion-focused website designer.
+
+Build a complete, modern, production-ready real-estate website for:
+
+BRIGHT LIGHT HOMES & PROPERTIES
+
+Tagline:
+"Connecting you to your dreams"
+
+The company operates in Kenya, with a strong focus on Nairobi, Nakuru, and surrounding areas.
+
+IMPORTANT:
+This is not a static mockup.
+
+Build a fully functional website with:
+- Responsive frontend
+- Real property listings
+- Property search and filtering
+- Property detail pages
+- Lead capture
+- Contact forms
+- WhatsApp integration
+- Viewing requests
+- User-friendly navigation
+- SEO
+- CMS/CRM-ready architecture
+- Firebase/Firestore integration where appropriate
+- Secure server-side operations
+- Admin/CRM integration
+- Light/Dark mode
+- Mobile-first design
+- High performance
+
+The website must connect to the existing Bright Light Homes & Properties CRM where appropriate.
+
+==================================================
+1. BRAND IDENTITY
+==================================================
+
+Company:
+Bright Light Homes & Properties
+
+Tagline:
+"Connecting you to your dreams"
+
+Location:
+Kenya
+
+Primary markets:
+- Nairobi
+- Nakuru
+- Other Kenyan locations
+
+Business phone numbers:
++254 720 477 555
++254 754 175 388
++254 728 576 146
+
+Email:
+brightlighthomes2030@gmail.com
+
+Office:
+Belpar House, House, 2nd Floor, Room 10
+
+Use the existing company logo if available in the project.
+
+Do NOT invent a new company identity if the existing logo/branding is already available.
+
+Create a premium visual identity appropriate for a Kenyan real-estate company.
+
+Design direction:
+- Premium
+- Trustworthy
+- Modern
+- Clean
+- Professional
+- Warm
+- Elegant
+- High-conversion
+- Real-estate focused
+
+Avoid:
+- Generic template appearance
+- Excessive animations
+- Clutter
+- Cheap-looking gradients
+- Fake testimonials
+- Fake property statistics
+- Fake awards
+- Fake reviews
+
+==================================================
+2. TECHNOLOGY
+==================================================
+
+Use the current Google AI Studio Build Mode environment.
+
+Preferred architecture:
+
+Frontend:
+- React
+- TypeScript
+- Modern component architecture
+- Responsive CSS/Tailwind if already configured
+
+Backend:
+- Node.js server runtime where required
+
+Database:
+- Firebase Firestore
+
+Authentication:
+- Firebase Authentication
+
+File storage:
+- Firebase Storage where appropriate
+
+Hosting/deployment:
+- Google Cloud Run / Google AI Studio deployment
+
+AI:
+- Gemini API through secure server-side implementation
+
+IMPORTANT SECURITY RULE:
+Never expose Gemini API keys, Firebase admin credentials, WhatsApp access tokens, or other private secrets in client-side code.
+
+Use environment variables / server-side secrets.
+
+==================================================
+3. WEBSITE STRUCTURE
+==================================================
+
+Create these major pages:
+
+PUBLIC WEBSITE
+
+/
+Home
+
+/properties
+Property Listings
+
+/properties/:id
+Property Details
+
+/projects
+Projects
+
+/projects/:id
+Project Details
+
+/about
+About Us
+
+/services
+Services
+
+/contact
+Contact Us
+
+/sell-with-us
+Sell With Us
+
+/buy-with-us
+Buy With Us
+
+/careers
+Careers
+
+/blog
+Blog
+
+/blog/:slug
+Blog Article
+
+/request-viewing
+Request a Viewing
+
+/favorites
+Favorites
+
+/compare
+Property Comparison
+
+/faq
+Frequently Asked Questions
+
+/privacy
+Privacy Policy
+
+/terms
+Terms & Conditions
+
+==================================================
+4. HEADER / NAVIGATION
+==================================================
+
+Create a premium responsive header.
+
+Desktop navigation:
+
+Logo
+
+Home
+Properties
+Projects
+Services
+About Us
+Blog
+Contact
+
+Primary CTA:
+"Find a Property"
+
+Secondary CTA:
+"List Your Property"
+
+Add:
+- Search icon
+- Favorites icon
+- Contact/WhatsApp CTA
+- Dark/light mode toggle
+
+Mobile:
+Use a professional slide-out navigation menu.
+
+Header should remain usable on mobile.
+
+==================================================
+5. HOMEPAGE
+==================================================
+
+Build a visually impressive real-estate homepage.
+
+SECTION 1 — HERO
+
+Large high-quality property imagery.
+
+Headline:
+
+"Find a Place That Feels Like Home"
+
+Supporting text:
+
+"Discover homes, apartments, land and investment opportunities across Kenya with Bright Light Homes & Properties."
+
+Search box overlay.
+
+Search fields:
+
+Location
+Property Type
+Purpose
+Bedrooms
+Price Range
+
+Purpose:
+- Buy
+- Rent
+- Invest
+
+CTA:
+"Search Properties"
+
+Secondary CTA:
+"Explore Properties"
+
+Include WhatsApp CTA.
+
+==================================================
+6. FEATURED PROPERTIES
+==================================================
+
+Create a Featured Properties section.
+
+Property cards should include:
+
+- Property image
+- Property title
+- Location
+- Property type
+- Bedrooms
+- Bathrooms
+- Size
+- Price
+- Sale/Rent status
+- Featured badge
+- Favorite button
+- Compare button
+
+CTA:
+"View All Properties"
+
+Data must come from Firestore.
+
+Do NOT hardcode the primary property database.
+
+==================================================
+7. PROPERTY SEARCH
+==================================================
+
+Create a powerful property search experience.
+
+Filters:
+
+Location
+County
+Town
+Neighborhood
+Property Type
+Purpose
+Price minimum
+Price maximum
+Bedrooms
+Bathrooms
+Property size
+Furnished
+Parking
+Gated community
+New development
+Featured
+Availability
+
+Property types:
+
+- Apartment
+- House
+- Villa
+- Maisonette
+- Townhouse
+- Land
+- Commercial
+- Office
+- Shop
+- Warehouse
+- Development Project
+
+Allow sorting:
+
+- Newest
+- Price low to high
+- Price high to low
+- Most popular
+- Featured
+
+Search should update results dynamically.
+
+Use pagination or infinite scrolling.
+
+==================================================
+8. PROPERTY DETAIL PAGE
+==================================================
+
+Create a premium property detail page.
+
+Include:
+
+Property gallery
+
+Large main image
+
+Thumbnail gallery
+
+Property title
+
+Location
+
+Price
+
+Property type
+
+Bedrooms
+
+Bathrooms
+
+Size
+
+Parking
+
+Status
+
+Description
+
+Features
+
+Amenities
+
+Nearby locations
+
+Google Maps location
+
+Agent information
+
+WhatsApp CTA
+
+Call CTA
+
+Request Viewing CTA
+
+Book Viewing CTA
+
+Share button
+
+Favorite button
+
+Compare button
+
+Similar properties
+
+==================================================
+9. LEAD CAPTURE
+==================================================
+
+Every property should have lead capture.
+
+Create:
+
+"Interested in this property?"
+
+Form:
+
+Full Name
+Phone Number
+Email
+Preferred Contact Method
+Message
+
+CTA:
+"Send Enquiry"
+
+Store submissions in Firestore.
+
+Lead structure:
+
+leadId
+name
+phone
+email
+message
+propertyId
+propertyTitle
+source
+status
+assignedAgent
+createdAt
+
+Default source:
+
+Website
+
+Default status:
+
+NEW
+
+After submission:
+
+Show a success confirmation.
+
+Do not lose the lead.
+
+==================================================
+10. REQUEST A VIEWING
+==================================================
+
+Create a viewing request workflow.
+
+Form:
+
+Name
+Phone
+Email
+Property
+Preferred Date
+Preferred Time
+Number of People
+Message
+
+Submit to Firestore.
+
+Create:
+
+viewingRequests
+
+Fields:
+
+id
+leadId
+propertyId
+date
+time
+status
+notes
+createdAt
+assignedAgent
+
+Statuses:
+
+REQUESTED
+CONFIRMED
+RESCHEDULED
+COMPLETED
+CANCELLED
+
+The CRM should be able to access these requests.
+
+==================================================
+11. WHATSAPP INTEGRATION
+==================================================
+
+Create prominent WhatsApp CTAs.
+
+Examples:
+
+"Chat on WhatsApp"
+
+"Ask About This Property"
+
+"Schedule a Viewing"
+
+"Speak to an Agent"
+
+Use the official WhatsApp Business API architecture for automated messaging where configured.
+
+For simple click-to-chat functionality, use the company's official WhatsApp number.
+
+Do NOT implement unauthorized WhatsApp group scraping.
+
+The architecture should support:
+
+Website
+↓
+CRM
+↓
+WhatsApp Business API
+
+Potential automated messages:
+
+New enquiry received
+Viewing confirmation
+Viewing reminder
+Booking confirmation
+Payment reminder
+Follow-up message
+
+All API credentials must remain server-side.
+
+==================================================
+12. PROJECTS PAGE
+==================================================
+
+Create a dedicated property-development/projects section.
+
+Projects should support:
+
+Project name
+Developer
+Location
+Description
+Project images
+Master plan
+Amenities
+Expected completion
+Units available
+Starting price
+Payment plan
+Construction progress
+
+Project hierarchy:
+
+Project
+↓
+Tower
+↓
+Floor
+↓
+Unit
+
+Example:
+
+Project:
+Sunrise Residences
+
+Tower A
+
+Floor 1
+Unit A101
+Unit A102
+Unit A103
+
+Floor 2
+Unit A201
+Unit A202
+
+Unit statuses:
+
+AVAILABLE
+BLOCKED
+RESERVED
+UNDER_OFFER
+SOLD
+
+Display availability visually.
+
+==================================================
+13. PROJECT DETAIL PAGE
+==================================================
+
+Include:
+
+Project hero image
+
+Project description
+
+Location
+
+Developer information
+
+Amenities
+
+Construction progress
+
+Gallery
+
+Floor plans
+
+Master plan
+
+Payment plan
+
+Available units
+
+Price range
+
+Expected completion
+
+CTA:
+
+"Request Project Information"
+
+"Book a Site Visit"
+
+"Talk to Sales"
+
+==================================================
+14. UNIT AVAILABILITY
+==================================================
+
+For developments, create an interactive unit availability interface.
+
+Display:
+
+Tower
+Floor
+Unit
+Type
+Bedrooms
+Size
+Price
+Status
+
+Color-code statuses visually.
+
+Clicking a unit opens:
+
+Unit details
+Floor plan
+Price
+Payment plan
+Availability
+Request booking
+
+Use Firestore transactions when creating reservations so that two users cannot reserve the same unit simultaneously.
+
+==================================================
+15. SERVICES PAGE
+==================================================
+
+Create professional service sections.
+
+Services:
+
+Property Sales
+
+Property Letting
+
+Property Management
+
+Land Sales
+
+Real Estate Investment Advisory
+
+Property Marketing
+
+Development Sales
+
+Commercial Property
+
+Property Valuation Support
+
+Buyer Representation
+
+Seller Representation
+
+Each service should have:
+
+Icon
+Title
+Description
+CTA
+
+==================================================
+16. ABOUT US
+==================================================
+
+Create a professional About Us page.
+
+Sections:
+
+Who We Are
+
+Our Mission
+
+Our Vision
+
+Our Values
+
+Why Choose Bright Light Homes & Properties
+
+Our Approach
+
+Our Locations
+
+Call to Action
+
+Do not invent company history, awards, staff numbers, years of operation, or certifications.
+
+Use only verified information supplied through the CMS.
+
+==================================================
+17. SELL WITH US
+==================================================
+
+Create:
+
+"Sell Your Property With Us"
+
+Form:
+
+Name
+Phone
+Email
+Property Type
+Location
+Property Address
+Expected Price
+Message
+Upload Photos/Documents
+
+Store submissions securely.
+
+Create seller lead.
+
+CRM status:
+
+NEW_SELLER_LEAD
+
+Notify the appropriate team.
+
+==================================================
+18. BUY WITH US
+==================================================
+
+Create buyer enquiry page.
+
+Form:
+
+Name
+Phone
+Email
+
+Property preference
+Location
+Budget
+Bedrooms
+Property type
+Purpose
+
+Purpose:
+
+Home
+Investment
+Rental
+Commercial
+
+Additional requirements
+
+Store as buyer lead.
+
+==================================================
+19. CONTACT PAGE
+==================================================
+
+Display:
+
+Bright Light Homes & Properties
+
+Belpar House, House, 2nd Floor, Room 10
+
+Phone:
++254 720 477 555
++254 754 175 388
++254 728 576 146
+
+Email:
+brightlighthomes2030@gmail.com
+
+Include:
+
+Contact form
+Map
+WhatsApp CTA
+Call CTA
+
+Contact form fields:
+
+Name
+Phone
+Email
+Subject
+Message
+
+Store contact submissions in Firestore.
+
+==================================================
+20. AGENT INFORMATION
+==================================================
+
+Property pages should support assigned agents.
+
+Agent fields:
+
+Name
+Photo
+Phone
+Email
+Position
+Bio
+
+Allow:
+
+Call
+WhatsApp
+Email
+
+Do not invent agent information.
+
+If no agent is assigned, show:
+
+"Bright Light Homes & Properties Sales Team"
+
+==================================================
+21. FAVORITES
+==================================================
+
+Allow visitors to favorite properties.
+
+For anonymous visitors:
+
+Use browser/local storage temporarily.
+
+For authenticated users:
+
+Persist favorites in Firestore.
+
+Create:
+
+favorites
+
+userId
+propertyId
+createdAt
+
+==================================================
+22. PROPERTY COMPARISON
+==================================================
+
+Allow users to compare properties.
+
+Compare:
+
+Price
+Location
+Type
+Bedrooms
+Bathrooms
+Size
+Amenities
+Parking
+Status
+
+Maximum:
+4 properties.
+
+Create a clean comparison table.
+
+==================================================
+23. BLOG
+==================================================
+
+Create a professional real-estate blog.
+
+Categories:
+
+Buying Property
+Selling Property
+Investment
+Land
+Nairobi Property
+Nakuru Property
+Market Insights
+Home Ownership
+Property Management
+
+Blog fields:
+
+Title
+Slug
+Featured Image
+Excerpt
+Content
+Category
+Author
+Published Date
+SEO Title
+SEO Description
+Status
+
+Statuses:
+
+DRAFT
+PUBLISHED
+
+Blog content should come from Firestore/CMS.
+
+==================================================
+24. SEO
+==================================================
+
+Implement strong technical SEO.
+
+Every page must support:
+
+Unique title
+Meta description
+Canonical URL
+Open Graph metadata
+Twitter/social metadata
+Structured data
+
+Property pages should support appropriate Real Estate / Product-style structured data where applicable.
+
+Generate:
+
+sitemap.xml
+
+robots.txt
+
+Use SEO-friendly URLs.
+
+Examples:
+
+/properties/3-bedroom-apartment-kilimani
+
+/projects/sunrise-residences
+
+/blog/buying-property-in-nairobi
+
+Optimize images.
+
+Use lazy loading.
+
+==================================================
+25. LOCAL SEO
+==================================================
+
+Optimize for Kenya.
+
+Target relevant search intent such as:
+
+Property for sale in Nairobi
+Houses for sale in Nairobi
+Apartments for sale in Nairobi
+Property for sale in Nakuru
+Land for sale in Kenya
+Apartments for rent in Nairobi
+Real estate company in Nairobi
+Real estate company in Nakuru
+
+Do not keyword-stuff.
+
+Create useful content rather than spam pages.
+
+==================================================
+26. ADMIN / CMS CONNECTION
+==================================================
+
+The existing Bright Light CRM is the operational backend.
+
+The website should be connected to the same Firestore architecture where possible.
+
+CRM administrators should be able to manage:
+
+Properties
+Projects
+Units
+Agents
+Blog posts
+Services
+Website content
+Featured properties
+Contact information
+FAQs
+Images
+SEO metadata
+
+Website changes made in the CRM should appear on the website.
+
+==================================================
+27. WEBSITE ADMIN
+==================================================
+
+If the existing CRM has an admin panel, add a:
+
+Website Management
+
+section.
+
+Subsections:
+
+Website Dashboard
+
+Properties
+
+Projects
+
+Blog
+
+Pages
+
+Homepage
+
+Services
+
+FAQs
+
+Testimonials
+
+Agents
+
+SEO
+
+Media Library
+
+Contact Information
+
+Social Media
+
+Website Settings
+
+==================================================
+28. HOMEPAGE CMS
+==================================================
+
+Allow Super Admin and Director to edit:
+
+Hero headline
+Hero description
+Hero image
+CTA text
+Featured properties
+Featured projects
+Services
+About section
+Why choose us section
+Blog posts
+FAQs
+Footer content
+
+Changes should update the public website.
+
+==================================================
+29. TESTIMONIALS
+==================================================
+
+Create testimonial management.
+
+Fields:
+
+Name
+Role
+Message
+Photo
+Status
+
+IMPORTANT:
+
+Do not populate fake testimonials.
+
+Only display testimonials entered by authorized administrators.
+
+==================================================
+30. FAQ
+==================================================
+
+Create FAQ management.
+
+Fields:
+
+Question
+Answer
+Category
+Status
+Sort order
+
+Display FAQs on the website.
+
+==================================================
+31. MEDIA LIBRARY
+==================================================
+
+Create a media library.
+
+Support:
+
+Upload
+Preview
+Delete
+Search
+Categories
+Tags
+Property association
+Project association
+Blog association
+
+Storage:
+
+Firebase Storage.
+
+Images should have:
+
+Alt text
+Caption
+Description
+
+Optimize uploaded images where practical.
+
+==================================================
+32. USER AUTHENTICATION
+==================================================
+
+Public users may browse without logging in.
+
+Authentication should be required for:
+
+Admin
+CRM
+Staff
+Broker portal
+
+Support:
+
+Email/password
+Password reset
+Session persistence
+Logout
+
+Use Firebase Authentication.
+
+==================================================
+33. BROKER PORTAL
+==================================================
+
+The existing CRM broker portal should be able to access approved website listings.
+
+Brokers can:
+
+View available properties
+View project inventory
+Share listings
+Submit leads
+Track their leads
+Request viewings
+View commissions where authorized
+
+Do not expose internal company information.
+
+==================================================
+34. AI FEATURES
+==================================================
+
+Integrate Gemini securely.
+
+Possible website AI features:
+
+AI Property Search Assistant
+
+Example:
+
+User:
+"I need a 3 bedroom apartment in Nairobi under KES 15 million."
+
+AI should interpret the request and search actual Firestore listings.
+
+AI must NOT invent properties.
+
+AI Listing Assistant:
+
+Generate:
+- Property descriptions
+- SEO descriptions
+- Social media captions
+- WhatsApp messages
+
+AI Lead Assistant:
+
+Summarize enquiry
+Identify buyer intent
+Suggest suitable properties
+Suggest follow-up questions
+
+AI FAQ Assistant:
+
+Answer from approved company/property information.
+
+IMPORTANT:
+
+AI answers must be grounded in actual CRM/database information wherever the question concerns company properties.
+
+==================================================
+35. ANALYTICS
+==================================================
+
+Integrate analytics.
+
+Track:
+
+Page views
+Property views
+Searches
+Property enquiries
+Viewing requests
+WhatsApp clicks
+Phone clicks
+Email clicks
+Favorites
+Compare actions
+Lead conversions
+
+Create event tracking architecture.
+
+Do not expose personal information unnecessarily.
+
+==================================================
+36. CONVERSION TRACKING
+==================================================
+
+Track:
+
+Property enquiry
+Viewing request
+Phone click
+WhatsApp click
+Contact form
+Seller enquiry
+Buyer enquiry
+Project enquiry
+
+Make conversion tracking compatible with future:
+
+Google Analytics
+Google Ads
+Meta Pixel
+
+Keep tracking IDs configurable in Settings.
+
+==================================================
+37. SECURITY
+==================================================
+
+Implement:
+
+Firestore security rules
+Authentication
+Role-based access
+Input validation
+Server-side validation
+Rate limiting where appropriate
+Secure file uploads
+File type validation
+File size limits
+XSS protection
+CSRF protection where relevant
+Secure API endpoints
+Secret management
+Audit logging
+
+Never trust client-side role claims.
+
+Server/database rules must enforce permissions.
+
+==================================================
+38. DESIGN SYSTEM
+==================================================
+
+Create a consistent design system.
+
+Components:
+
+Buttons
+Cards
+Forms
+Inputs
+Dropdowns
+Modals
+Alerts
+Badges
+Tables
+Tabs
+Pagination
+Breadcrumbs
+Skeleton loaders
+Empty states
+Error states
+
+Typography:
+
+Modern professional sans-serif.
+
+Spacing:
+
+Clean and generous.
+
+Cards:
+
+Premium but restrained.
+
+Images:
+
+Large, high-quality real-estate imagery.
+
+==================================================
+39. LIGHT / DARK MODE
+==================================================
+
+Implement:
+
+LIGHT
+DARK
+SYSTEM
+
+The theme must:
+
+- Change globally
+- Persist after refresh
+- Work on every page
+- Work on mobile
+- Work inside forms/modals
+- Work inside dashboards
+
+Do not create a theme toggle that only changes one component.
+
+==================================================
+40. MOBILE RESPONSIVENESS
+==================================================
+
+The website must be mobile-first.
+
+Test layouts for:
+
+320px
+375px
+390px
+414px
+768px
+1024px
+1280px
+1440px+
+
+Property cards should adapt correctly.
+
+Search forms should become stacked on mobile.
+
+Navigation should become a mobile menu.
+
+Buttons must remain easy to tap.
+
+==================================================
+41. PERFORMANCE
+==================================================
+
+Optimize for fast loading.
+
+Implement:
+
+Lazy-loaded images
+Code splitting
+Optimized assets
+Pagination
+Firestore query optimization
+Caching where appropriate
+Minimal unnecessary API requests
+
+Avoid loading every property at once.
+
+==================================================
+42. ACCESSIBILITY
+==================================================
+
+Follow accessible web practices.
+
+Include:
+
+Semantic HTML
+Keyboard navigation
+ARIA labels where appropriate
+Accessible forms
+Visible focus states
+Alt text
+Good contrast
+Accessible modal dialogs
+
+==================================================
+43. ERROR HANDLING
+==================================================
+
+Every important operation needs:
+
+Loading state
+Success state
+Error state
+Empty state
+
+Examples:
+
+Property unavailable
+Network error
+Viewing request failed
+Form validation error
+Authentication error
+Firestore error
+File upload error
+
+Never leave users staring at a broken or blank screen.
+
+==================================================
+44. FIRESTORE DATA MODEL
+==================================================
+
+Use collections such as:
+
+users
+leads
+contacts
+properties
+projects
+towers
+floors
+units
+viewingRequests
+bookings
+agents
+brokers
+blogPosts
+services
+faqs
+testimonials
+websitePages
+media
+favorites
+notifications
+auditLogs
+settings
+
+Use proper relationships and indexes.
+
+==================================================
+45. PROPERTY DATA MODEL
+==================================================
+
+Example:
+
+{
+  id,
+  title,
+  slug,
+  description,
+  propertyType,
+  purpose,
+  price,
+  currency,
+  location,
+  county,
+  town,
+  neighborhood,
+  bedrooms,
+  bathrooms,
+  size,
+  sizeUnit,
+  parking,
+  amenities,
+  images,
+  featured,
+  status,
+  agentId,
+  projectId,
+  unitId,
+  createdAt,
+  updatedAt
+}
+
+Currency:
+
+KES
+
+Display prices using Kenyan Shilling formatting.
+
+Example:
+
+KES 15,000,000
+
+==================================================
+46. CURRENCY
+==================================================
+
+Primary currency:
+
+KES
+
+Support future currencies if required.
+
+All financial calculations should use proper numeric values rather than formatted strings.
+
+==================================================
+47. FORMS
+==================================================
+
+Every public form must:
+
+Validate input
+
+Show errors clearly
+
+Prevent duplicate submissions
+
+Show submission progress
+
+Store submission
+
+Provide confirmation
+
+Optionally notify CRM staff
+
+==================================================
+48. CRM LEAD ROUTING
+==================================================
+
+When a website lead arrives:
+
+Website
+↓
+Firestore
+↓
+CRM Lead
+↓
+Lead Assignment
+↓
+Sales Agent
+↓
+Follow-up
+
+Lead sources:
+
+WEBSITE
+PROPERTY_PAGE
+PROJECT_PAGE
+BLOG
+CONTACT_FORM
+SELL_WITH_US
+BUY_WITH_US
+WHATSAPP
+ORGANIC_SEARCH
+GOOGLE_ADS
+META_ADS
+
+==================================================
+49. PROPERTY AVAILABILITY
+==================================================
+
+Never show a property as available if its current CRM status is:
+
+SOLD
+
+For development units, availability must be read from the live inventory.
+
+If a unit becomes sold/reserved in the CRM, the website should reflect the updated status.
+
+==================================================
+50. FOOTER
+==================================================
+
+Create a premium footer.
+
+Include:
+
+Bright Light Homes & Properties
+
+"Connecting you to your dreams"
+
+Quick Links
+
+Properties
+Projects
+Services
+About Us
+Blog
+Contact
+
+Services
+
+Property Sales
+Property Letting
+Property Management
+Land
+Investment
+
+Contact
+
++254 720 477 555
++254 754 175 388
++254 728 576 146
+
+brightlighthomes2030@gmail.com
+
+Belpar House, House, 2nd Floor, Room 10
+
+Social media icons should be configurable from CMS.
+
+Include:
+
+Privacy Policy
+Terms & Conditions
+
+Copyright:
+
+© Bright Light Homes & Properties. All rights reserved.
+
+==================================================
+51. ADMIN PERMISSIONS
+==================================================
+
+SUPER_ADMIN:
+
+Full access.
+
+DIRECTOR:
+
+Full access to website and CRM operations.
+
+Other users:
+
+Only access features permitted by role.
+
+Website content editing should be restricted to authorized users.
+
+==================================================
+52. AUDIT LOGGING
+==================================================
+
+Record important administrative actions:
+
+Created property
+Updated property
+Deleted property
+Published blog
+Updated homepage
+Changed website settings
+Changed SEO
+Uploaded media
+Changed project
+Changed unit status
+
+Store:
+
+userId
+action
+resource
+resourceId
+timestamp
+metadata
+
+==================================================
+53. NO FAKE DATA
+==================================================
+
+This is extremely important.
+
+Do NOT create fake:
+
+Properties
+Clients
+Sales
+Revenue
+Testimonials
+Agents
+Reviews
+Awards
+Company history
+Property availability
+Financial statistics
+
+Use empty states when real data does not exist.
+
+Example:
+
+"No properties have been published yet."
+
+==================================================
+54. REAL-TIME DATA
+==================================================
+
+Where appropriate, use Firestore realtime listeners for:
+
+Property availability
+Project inventory
+Lead notifications
+Viewing requests
+CRM website content
+
+Avoid unnecessary listeners where normal queries are sufficient.
+
+==================================================
+55. GOOGLE MAPS
+==================================================
+
+Design the architecture to support Google Maps.
+
+Property records should support:
+
+latitude
+longitude
+address
+
+If Google Maps API is not configured, display a graceful fallback instead of breaking the page.
+
+==================================================
+56. SOCIAL SHARING
+==================================================
+
+Property pages should support sharing.
+
+Buttons:
+
+WhatsApp
+Facebook
+X
+Copy Link
+
+Generate correct Open Graph metadata.
+
+==================================================
+57. WEBSITE SEARCH
+==================================================
+
+Implement global search.
+
+Search:
+
+Properties
+Projects
+Blog articles
+
+Show categorized results.
+
+==================================================
+58. BREADCRUMBS
+==================================================
+
+Add breadcrumbs to:
+
+Property pages
+Project pages
+Blog articles
+Service pages
+
+Example:
+
+Home > Properties > Nairobi > Kilimani > Apartment
+
+==================================================
+59. PROPERTY CARD UX
+==================================================
+
+Create a reusable PropertyCard component.
+
+It should support:
+
+Image
+Favorite
+Compare
+Featured badge
+Property type
+Price
+Location
+Bedrooms
+Bathrooms
+Size
+Status
+View Property button
+
+Use consistent design across the website.
+
+==================================================
+60. FINAL QUALITY REQUIREMENTS
+==================================================
+
+Before considering the website complete, test:
+
+Homepage
+
+Navigation
+
+Property search
+
+Property filters
+
+Property detail
+
+Lead submission
+
+Viewing request
+
+WhatsApp buttons
+
+Contact form
+
+Seller form
+
+Buyer form
+
+Projects
+
+Units
+
+Favorites
+
+Compare
+
+Blog
+
+SEO metadata
+
+Mobile layout
+
+Dark mode
+
+Authentication
+
+Firestore persistence
+
+CRM integration
+
+Admin content management
+
+Media uploads
+
+Error states
+
+Loading states
+
+Permissions
+
+Security rules
+
+Do not leave placeholder buttons.
+
+Every button must either:
+
+- Perform its intended action
+OR
+- Clearly indicate that the feature is not configured yet.
+
+Do not create fake functionality.
+
+==================================================
+61. DEVELOPMENT APPROACH
+==================================================
+
+First inspect the existing Bright Light Homes & Properties CRM project.
+
+Do not destroy existing CRM functionality.
+
+Reuse:
+
+- Existing Firebase configuration
+- Existing authentication
+- Existing Firestore schema
+- Existing components
+- Existing design system
+- Existing roles
+- Existing property data
+- Existing CRM integrations
+
+Where existing functionality conflicts with this specification, preserve working CRM functionality and extend it cleanly.
+
+Build the public website as a separate public-facing layer connected to the same secure backend.
+
+Use reusable components.
+
+Avoid duplicated code.
+
+Keep the architecture maintainable.
+
+==================================================
+62. BUILD ORDER
+==================================================
+
+Implement in this order:
+
+PHASE 1
+Website shell
+Header
+Footer
+Routing
+Responsive design
+Theme
+
+PHASE 2
+Homepage
+Property listings
+Property details
+
+PHASE 3
+Firestore property integration
+Search
+Filtering
+Pagination
+
+PHASE 4
+Lead capture
+Viewing requests
+Contact forms
+WhatsApp
+
+PHASE 5
+Projects
+Towers
+Floors
+Units
+Availability
+
+PHASE 6
+Blog
+Services
+About
+FAQ
+
+PHASE 7
+Favorites
+Comparison
+User authentication
+
+PHASE 8
+CRM/admin website management
+
+PHASE 9
+SEO
+Analytics
+Conversion tracking
+
+PHASE 10
+Security
+Performance
+Accessibility
+Testing
+
+==================================================
+63. FINAL INSTRUCTION
+==================================================
+
+Build this as a real production website for Bright Light Homes & Properties.
+
+Do not merely generate a visual prototype.
+
+Use real Firebase persistence.
+
+Use real CRUD operations.
+
+Use real validation.
+
+Use real authentication.
+
+Use real property data.
+
+Use real lead capture.
+
+Use real project/unit availability.
+
+Use secure server-side APIs.
+
+Connect the website to the existing CRM.
+
+Make the website visually premium and highly trustworthy.
+
+The final result should feel like a serious Kenyan real-estate company website, not an AI-generated template.
+
+After implementation, provide a concise technical summary showing:
+
+1. Pages created
+2. Firestore collections used
+3. Authentication implementation
+4. CRM integration
+5. WhatsApp integration
+6. AI integration
+7. SEO implementation
+8. Analytics implementation
+9. Security implementation
+10. Remaining configuration items
