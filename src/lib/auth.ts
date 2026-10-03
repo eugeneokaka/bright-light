@@ -22,11 +22,21 @@ async function sendEmail(to: string, subject: string, html: string) {
   }
 }
 
+const trustedOrigins = [
+  "https://bright-light-tau.vercel.app",
+  ...(process.env.BETTER_AUTH_URL ? [process.env.BETTER_AUTH_URL] : []),
+  ...(process.env.NEXT_PUBLIC_APP_URL ? [process.env.NEXT_PUBLIC_APP_URL] : []),
+  ...(process.env.NODE_ENV === "development"
+    ? ["http://localhost:3000", "http://127.0.0.1:3000"]
+    : []),
+];
+
 export const auth = betterAuth({
   database: drizzleAdapter(db, {
     provider: "pg",
     schema,
   }),
+  trustedOrigins,
   emailAndPassword: {
     enabled: true,
     sendResetPassword: async ({ user, url }) => {
