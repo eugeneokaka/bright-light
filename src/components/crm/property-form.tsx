@@ -94,6 +94,7 @@ export function PropertyForm() {
       town: String(formData.get("town") ?? ""),
       neighborhood: String(formData.get("neighborhood") ?? ""),
       address: String(formData.get("address") ?? ""),
+      mapUrl: String(formData.get("mapUrl") ?? ""),
       latitude: toNumber(formData.get("latitude")),
       longitude: toNumber(formData.get("longitude")),
       bedrooms: toNumber(formData.get("bedrooms")),
@@ -316,6 +317,20 @@ export function PropertyForm() {
                 step="any"
                 placeholder="36.8219"
               />
+            </div>
+
+            <div className="flex flex-col gap-2 sm:col-span-2">
+              <Label htmlFor="mapUrl">Google Maps link</Label>
+              <Input
+                id="mapUrl"
+                name="mapUrl"
+                type="url"
+                placeholder="https://maps.app.goo.gl/..."
+              />
+              <p className="text-xs text-muted-foreground">
+                Paste a Google Maps link. It opens in Google Maps when clicked
+                from the property list.
+              </p>
             </div>
           </section>
 

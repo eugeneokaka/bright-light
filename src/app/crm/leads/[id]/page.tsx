@@ -96,12 +96,15 @@ export default async function LeadDetailPage({
 
       <div className="mt-4 flex flex-wrap items-center gap-3">
         <h1 className="text-2xl font-semibold">{lead.name}</h1>
+        <Badge variant="outline">
+          {lead.type === "PROJECT" ? "Project" : "Person"}
+        </Badge>
         <Badge variant={statusVariant(lead.status)}>
           {lead.status.replace(/_/g, " ")}
         </Badge>
       </div>
       <p className="mt-1 text-sm text-muted-foreground">
-        {lead.source.replace(/_/g, " ")} · created {formatDateTime(lead.createdAt)}
+        {lead.source} · created {formatDateTime(lead.createdAt)}
       </p>
 
       <div className="mt-8 grid grid-cols-1 gap-6 lg:grid-cols-2">

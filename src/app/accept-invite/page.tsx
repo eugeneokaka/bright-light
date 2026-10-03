@@ -1,10 +1,9 @@
+import Link from "next/link";
 import { headers } from "next/headers";
 import { redirect } from "next/navigation";
 import { auth } from "@/lib/auth";
-import Link from "next/link";
-import { LoginForm } from "@/components/auth/login-form";
+import { AcceptInviteForm } from "@/components/auth/accept-invite-form";
 import { BrandMark } from "@/components/brand";
-import { Alert, AlertDescription } from "@/components/ui/alert";
 import {
   Card,
   CardContent,
@@ -14,12 +13,12 @@ import {
 } from "@/components/ui/card";
 
 export const metadata = {
-  title: "Sign in",
+  title: "Activate your account",
 };
 
 type SearchParams = Promise<Record<string, string | string[] | undefined>>;
 
-export default async function LoginPage({
+export default async function AcceptInvitePage({
   searchParams,
 }: {
   searchParams: SearchParams;
@@ -31,7 +30,8 @@ export default async function LoginPage({
   }
 
   const params = await searchParams;
-  const activated = params.activated === "1";
+  const rawEmail = params.email;
+  const defaultEmail = Array.isArray(rawEmail) ? rawEmail[0] : rawEmail;
 
   return (
     <main className="flex flex-1 items-center justify-center px-4 py-16">
@@ -43,25 +43,19 @@ export default async function LoginPage({
               Bright Light <span className="text-muted-foreground">CRM</span>
             </span>
           </div>
-          <CardTitle className="mt-4 text-xl">Sign in</CardTitle>
-          <CardDescription>Access the Bright Light CRM.</CardDescription>
+          <CardTitle className="mt-4 text-xl">Activate your account</CardTitle>
+          <CardDescription>
+            Enter the 6-digit code from your invite email, then create a
+            password.
+          </CardDescription>
         </CardHeader>
 
         <CardContent className="flex flex-col gap-6">
-          {activated ? (
-            <Alert>
-              <AlertDescription>
-                Your account is active. Sign in with your email and password.
-              </AlertDescription>
-            </Alert>
-          ) : null}
-
-          <LoginForm />
-
-          <p className="text-xs text-muted-foreground">
-            Have an invite code?{" "}
-            <Link href="/accept-invite" className="text-foreground underline">
-              Activate your account
+          <AcceptInviteForm defaultEmail={defaultEmail} />
+          <p className="text-center text-xs text-muted-foreground">
+            Already activated?{" "}
+            <Link href="/login" className="text-foreground underline">
+              Sign in
             </Link>
           </p>
         </CardContent>

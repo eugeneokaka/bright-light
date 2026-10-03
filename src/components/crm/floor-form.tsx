@@ -1,7 +1,7 @@
 "use client";
 
 import { useState } from "react";
-import { createFloor } from "@/server/actions/tower-actions";
+import { createFloor, updateFloor } from "@/server/actions/tower-actions";
 import { Alert, AlertDescription } from "@/components/ui/alert";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
@@ -10,10 +10,26 @@ import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
 import { ImageUploader } from "@/components/crm/image-uploader";
 
-export function FloorForm({ towerId }: { towerId: string }) {
-  const [images, setImages] = useState<string[]>([]);
+export type FloorFormInitial = {
+  id: string;
+  name: string;
+  level: number | null;
+  description: string | null;
+  images: string[] | null;
+};
+
+export function FloorForm({
+  towerId,
+  floor,
+}: {
+  towerId: string;
+  floor?: FloorFormInitial;
+}) {
+  const [images, setImages] = useState<string[]>(floor?.images ?? []);
   const [error, setError] = useState<string | null>(null);
   const [isPending, setIsPending] = useState(false);
+
+  const isEditing = Boolean(floor);
 
   async function handleSubmit(event: React.FormEvent<HTMLFormElement>) {
     event.preventDefault();
@@ -21,14 +37,18 @@ export function FloorForm({ towerId }: { towerId: string }) {
     setIsPending(true);
 
     const formData = new FormData(event.currentTarget);
-
-    const result = await createFloor({
+    const values = {
       towerId,
       name: String(formData.get("name") ?? ""),
       level: String(formData.get("level") ?? ""),
       description: String(formData.get("description") ?? ""),
       images,
-    });
+    };
+
+    const result =
+      isEditing && floor
+        ? await updateFloor({ ...values, id: floor.id })
+        : await createFloor(values);
 
     if (result?.error) {
       setError(result.error);
@@ -47,6 +67,7 @@ export function FloorForm({ towerId }: { towerId: string }) {
                 id="name"
                 name="name"
                 required
+                defaultValue={floor?.name ?? ""}
                 placeholder="Ground Floor"
               />
             </div>
@@ -58,6 +79,7 @@ export function FloorForm({ towerId }: { towerId: string }) {
                 name="level"
                 type="number"
                 step={1}
+                defaultValue={floor?.level ?? ""}
                 placeholder="0"
               />
             </div>
@@ -65,7 +87,12 @@ export function FloorForm({ towerId }: { towerId: string }) {
 
           <div className="flex flex-col gap-2">
             <Label htmlFor="description">Description</Label>
-            <Textarea id="description" name="description" rows={3} />
+            <Textarea
+              id="description"
+              name="description"
+              rows={3}
+              defaultValue={floor?.description ?? ""}
+            />
           </div>
 
           <div className="flex flex-col gap-2">
@@ -81,7 +108,11 @@ export function FloorForm({ towerId }: { towerId: string }) {
 
           <div>
             <Button type="submit" disabled={isPending}>
-              {isPending ? "Creating…" : "Create floor"}
+              {isPending
+                ? "Saving…"
+                : isEditing
+                  ? "Save changes"
+                  : "Create floor"}
             </Button>
           </div>
         </form>

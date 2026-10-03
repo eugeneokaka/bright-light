@@ -69,6 +69,7 @@ export async function createLead(input: LeadFormInput): Promise<LeadActionResult
     .insert(leads)
     .values({
       name: data.name,
+      type: data.type,
       phone: data.phone,
       email: data.email || null,
       message: data.message || null,

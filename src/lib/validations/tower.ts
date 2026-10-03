@@ -52,9 +52,19 @@ export const stallInputSchema = z.object({
   images,
 });
 
+export const floorUpdateSchema = floorInputSchema.extend({
+  id: z.string().min(1),
+});
+
+export const stallUpdateSchema = stallInputSchema.extend({
+  id: z.string().min(1),
+});
+
 export type TowerInput = z.infer<typeof towerInputSchema>;
 export type TowerFormInput = z.input<typeof towerInputSchema>;
 export type FloorInput = z.infer<typeof floorInputSchema>;
 export type FloorFormInput = z.input<typeof floorInputSchema>;
+export type FloorUpdateInput = z.input<typeof floorUpdateSchema>;
 export type StallInput = z.infer<typeof stallInputSchema>;
 export type StallFormInput = z.input<typeof stallInputSchema>;
+export type StallUpdateInput = z.input<typeof stallUpdateSchema>;

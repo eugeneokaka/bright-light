@@ -74,10 +74,10 @@
   --input: oklch(1 0 0 / 16%);
   --ring: oklch(0.82 0.12 85 / 60%);
   --chart-1: oklch(0.82 0.12 85);
-  --chart-2: oklch(0.556 0 0);
-  --chart-3: oklch(0.439 0 0);
-  --chart-4: oklch(0.371 0 0);
-  --chart-5: oklch(0.269 0 0);
+  --chart-2: oklch(0.74 0.17 155);
+  --chart-3: oklch(0.7 0.13 240);
+  --chart-4: oklch(0.66 0.18 300);
+  --chart-5: oklch(0.68 0.2 25);
   --radius: 0.625rem;
   --sidebar: oklch(0.13 0 0);
   --sidebar-foreground: oklch(1 0 0);
@@ -109,6 +109,34 @@ body {
 
 ::selection {
   background: oklch(0.82 0.12 85 / 0.3);
+}
+
+@media print {
+  html,
+  html.dark {
+    color-scheme: light;
+  }
+
+  body {
+    background: #fff !important;
+    color: #000 !important;
+  }
+
+  .print-hide {
+    display: none !important;
+  }
+
+  .print-receipt,
+  .print-receipt * {
+    color: #000 !important;
+    background: transparent !important;
+    border-color: #d4d4d4 !important;
+    box-shadow: none !important;
+  }
+
+  @page {
+    margin: 16mm;
+  }
 }
 
 @layer base {

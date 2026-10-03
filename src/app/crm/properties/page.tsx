@@ -276,9 +276,21 @@ export default async function PropertiesPage({
                         : "—"}
                     </TableCell>
                     <TableCell className="text-muted-foreground">
-                      {[property.town, property.county]
-                        .filter(Boolean)
-                        .join(", ") || "—"}
+                      <span className="block">
+                        {[property.town, property.county]
+                          .filter(Boolean)
+                          .join(", ") || "—"}
+                      </span>
+                      {property.mapUrl ? (
+                        <a
+                          href={property.mapUrl}
+                          target="_blank"
+                          rel="noopener noreferrer"
+                          className="text-xs text-primary underline-offset-4 hover:underline"
+                        >
+                          View on map
+                        </a>
+                      ) : null}
                     </TableCell>
                     <TableCell className="text-muted-foreground">
                       {property.bedrooms ?? "—"}
@@ -292,17 +304,22 @@ export default async function PropertiesPage({
                       </Badge>
                     </TableCell>
                     <TableCell className="text-right">
-                      {canSell ? (
+                      <div className="flex items-center justify-end gap-2">
                         <Button asChild variant="outline" size="sm">
-                          <Link
-                            href={`/crm/transactions/new?propertyId=${property.id}`}
-                          >
-                            Sell
+                          <Link href={`/crm/properties/${property.id}`}>
+                            View more
                           </Link>
                         </Button>
-                      ) : (
-                        "—"
-                      )}
+                        {canSell ? (
+                          <Button asChild variant="outline" size="sm">
+                            <Link
+                              href={`/crm/transactions/new?propertyId=${property.id}`}
+                            >
+                              Sell
+                            </Link>
+                          </Button>
+                        ) : null}
+                      </div>
                     </TableCell>
                   </TableRow>
                 );

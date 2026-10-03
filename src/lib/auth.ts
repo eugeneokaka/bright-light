@@ -1,58 +1,62 @@
 import { betterAuth } from "better-auth";
+import { APIError } from "better-auth/api";
 import { drizzleAdapter } from "better-auth/adapters/drizzle";
-import { Resend } from "resend";
+import { eq } from "drizzle-orm";
 import { db } from "@/db";
 import * as schema from "@/db/schema";
+import { getAppUrl } from "@/lib/app-url";
+import { sendEmail } from "@/lib/email";
 
-const resend = new Resend(process.env.RESEND_API_KEY);
+const appUrl = getAppUrl();
 
-const emailFrom =
-  process.env.EMAIL_FROM ?? "Bright Light Homes <onboarding@resend.dev>";
-
-async function sendEmail(to: string, subject: string, html: string) {
-  const { error } = await resend.emails.send({
-    from: emailFrom,
-    to,
-    subject,
-    html,
-  });
-
-  if (error) {
-    throw new Error(error.message);
-  }
-}
-
-const trustedOrigins = [
-  "https://bright-light-tau.vercel.app",
-  ...(process.env.BETTER_AUTH_URL ? [process.env.BETTER_AUTH_URL] : []),
-  ...(process.env.NEXT_PUBLIC_APP_URL ? [process.env.NEXT_PUBLIC_APP_URL] : []),
-  ...(process.env.NODE_ENV === "development"
-    ? ["http://localhost:3000", "http://127.0.0.1:3000"]
-    : []),
-];
+const trustedOrigins = Array.from(
+  new Set(
+    [
+      appUrl,
+      "https://bright-light-tau.vercel.app",
+      ...(process.env.NODE_ENV === "development"
+        ? ["http://localhost:3000", "http://127.0.0.1:3000"]
+        : []),
+    ].filter(Boolean),
+  ),
+);
 
 export const auth = betterAuth({
+  baseURL: appUrl,
   database: drizzleAdapter(db, {
     provider: "pg",
     schema,
   }),
   trustedOrigins,
+  databaseHooks: {
+    session: {
+      create: {
+        before: async (session) => {
+          const [account] = await db
+            .select({ status: schema.user.status })
+            .from(schema.user)
+            .where(eq(schema.user.id, session.userId))
+            .limit(1);
+
+          if (account?.status === "SUSPENDED") {
+            throw new APIError("FORBIDDEN", {
+              message: "This account has been suspended.",
+            });
+          }
+        },
+      },
+    },
+  },
   emailAndPassword: {
     enabled: true,
+    disableSignUp: true,
+    requireEmailVerification: true,
+    autoSignIn: false,
     sendResetPassword: async ({ user, url }) => {
       await sendEmail(
         user.email,
         "Reset your Bright Light CRM password",
         `<p>Hello ${user.name},</p><p>We received a request to reset your password.</p><p><a href="${url}">Reset your password</a></p><p>If you did not request this, you can ignore this email.</p>`,
-      );
-    },
-  },
-  emailVerification: {
-    sendVerificationEmail: async ({ user, url }) => {
-      await sendEmail(
-        user.email,
-        "Verify your email address",
-        `<p>Hello ${user.name},</p><p>Please confirm your email address to activate your account.</p><p><a href="${url}">Verify your email</a></p>`,
       );
     },
   },

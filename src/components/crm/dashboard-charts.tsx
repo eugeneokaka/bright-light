@@ -150,7 +150,67 @@ export function CategoryBarChart({
           width={120}
         />
         <ChartTooltip content={<ChartTooltipContent />} />
-        <Bar dataKey="value" fill="var(--color-value)" radius={6} />
+        <Bar dataKey="value" radius={6}>
+          {data.map((item, index) => (
+            <Cell
+              key={item.label}
+              fill={CHART_COLORS[index % CHART_COLORS.length]}
+            />
+          ))}
+        </Bar>
+      </BarChart>
+    </ChartContainer>
+  );
+}
+
+export function ProfitBarChart({
+  data,
+}: {
+  data: { month: string; profit: number }[];
+}) {
+  const config = {
+    profit: { label: "Profit", color: "var(--chart-2)" },
+  } satisfies ChartConfig;
+
+  return (
+    <ChartContainer config={config} className="h-[240px] w-full">
+      <BarChart data={data} margin={{ left: 4, right: 8, top: 8 }}>
+        <CartesianGrid vertical={false} />
+        <XAxis
+          dataKey="month"
+          tickLine={false}
+          axisLine={false}
+          tickMargin={8}
+        />
+        <YAxis
+          tickLine={false}
+          axisLine={false}
+          width={48}
+          tickFormatter={(value: number) =>
+            Math.abs(value) >= 1_000_000
+              ? `${(value / 1_000_000).toFixed(0)}M`
+              : Math.abs(value) >= 1_000
+                ? `${Math.round(value / 1_000)}k`
+                : `${value}`
+          }
+        />
+        <ChartTooltip
+          content={
+            <ChartTooltipContent
+              formatter={(value) =>
+                `KES ${Number(value).toLocaleString("en-KE")}`
+              }
+            />
+          }
+        />
+        <Bar dataKey="profit" radius={6}>
+          {data.map((item) => (
+            <Cell
+              key={item.month}
+              fill={item.profit >= 0 ? "var(--chart-2)" : "var(--chart-5)"}
+            />
+          ))}
+        </Bar>
       </BarChart>
     </ChartContainer>
   );

@@ -58,22 +58,7 @@ export const propertyStatus = pgEnum("property_status", [
   "ARCHIVED",
 ]);
 
-export const leadSource = pgEnum("lead_source", [
-  "WEBSITE",
-  "PROPERTY_PAGE",
-  "PROJECT_PAGE",
-  "BLOG",
-  "CONTACT_FORM",
-  "SELL_WITH_US",
-  "BUY_WITH_US",
-  "WHATSAPP",
-  "ORGANIC_SEARCH",
-  "GOOGLE_ADS",
-  "META_ADS",
-  "REFERRAL",
-  "WALK_IN",
-  "PHONE_CALL",
-]);
+export const leadType = pgEnum("lead_type", ["PERSON", "PROJECT"]);
 
 export const leadStatus = pgEnum("lead_status", [
   "NEW",
@@ -228,6 +213,7 @@ export const properties = pgTable(
     town: text("town"),
     neighborhood: text("neighborhood"),
     address: text("address"),
+    mapUrl: text("map_url"),
     latitude: doublePrecision("latitude"),
     longitude: doublePrecision("longitude"),
     bedrooms: integer("bedrooms"),
@@ -294,7 +280,8 @@ export const leads = pgTable(
       onDelete: "set null",
     }),
     propertyTitle: text("property_title"),
-    source: leadSource("source").notNull().default("WEBSITE"),
+    type: leadType("type").notNull().default("PERSON"),
+    source: text("source").notNull(),
     status: leadStatus("status").notNull().default("NEW"),
     intent: leadIntent("intent"),
     priority: leadPriority("priority").notNull().default("MEDIUM"),

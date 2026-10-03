@@ -15,11 +15,7 @@ import { auth } from "@/lib/auth";
 import { db } from "@/db";
 import { leads, user } from "@/db/schema";
 import { canManageLeads } from "@/lib/permissions";
-import {
-  LEAD_PRIORITIES,
-  LEAD_SOURCES,
-  LEAD_STATUSES,
-} from "@/lib/validations/lead";
+import { LEAD_PRIORITIES, LEAD_STATUSES } from "@/lib/validations/lead";
 import { LeadFilters } from "@/components/crm/lead-filters";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
@@ -94,7 +90,7 @@ export default async function LeadsPage({
     conditions.push(eq(leads.status, status as (typeof LEAD_STATUSES)[number]));
   }
   if (source) {
-    conditions.push(eq(leads.source, source as (typeof LEAD_SOURCES)[number]));
+    conditions.push(ilike(leads.source, `%${source}%`));
   }
   if (priority) {
     conditions.push(
@@ -111,6 +107,7 @@ export default async function LeadsPage({
       .select({
         id: leads.id,
         name: leads.name,
+        type: leads.type,
         phone: leads.phone,
         email: leads.email,
         source: leads.source,
@@ -170,7 +167,8 @@ export default async function LeadsPage({
           <Table>
             <TableHeader>
               <TableRow>
-                <TableHead>Name</TableHead>
+                <TableHead>Customer / Project</TableHead>
+                <TableHead>Type</TableHead>
                 <TableHead>Phone</TableHead>
                 <TableHead>Source</TableHead>
                 <TableHead>Status</TableHead>
@@ -186,11 +184,16 @@ export default async function LeadsPage({
                   <TableCell className="font-medium text-foreground">
                     {lead.name}
                   </TableCell>
+                  <TableCell>
+                    <Badge variant="outline">
+                      {lead.type === "PROJECT" ? "Project" : "Person"}
+                    </Badge>
+                  </TableCell>
                   <TableCell className="text-muted-foreground">
                     {lead.phone}
                   </TableCell>
                   <TableCell className="text-muted-foreground">
-                    {lead.source.replace(/_/g, " ")}
+                    {lead.source}
                   </TableCell>
                   <TableCell>
                     <Badge variant={statusVariant(lead.status)}>

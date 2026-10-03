@@ -1,14 +1,15 @@
-import Link from "next/link";
 import { headers } from "next/headers";
 import { redirect } from "next/navigation";
 import {
+  ArrowUpRight,
   BadgeDollarSign,
   Building2,
   Handshake,
   TrendingUp,
-  type LucideIcon,
   Users,
+  type LucideIcon,
 } from "lucide-react";
+import { cn } from "cn";
 import { auth } from "@/lib/auth";
 import { db } from "@/db";
 import { leads, properties, transactions } from "@/db/schema";
@@ -17,17 +18,11 @@ import {
   canManageProperties,
   canManageTransactions,
 } from "@/lib/permissions";
-import { Button } from "@/components/ui/button";
-import {
-  Card,
-  CardContent,
-  CardDescription,
-  CardHeader,
-  CardTitle,
-} from "@/components/ui/card";
+import { AddNewMenu, type AddNewItem } from "@/components/crm/add-new-menu";
 import {
   CategoryBarChart,
   DonutChart,
+  ProfitBarChart,
   RevenueChart,
 } from "@/components/crm/dashboard-charts";
 
@@ -45,47 +40,64 @@ function StatCard({
   label,
   value,
   icon: Icon,
+  delta,
 }: {
   label: string;
   value: string | number;
   icon: LucideIcon;
+  delta: string;
 }) {
   return (
-    <Card className="transition-colors hover:ring-foreground/20">
-      <CardHeader>
-        <div className="flex items-center justify-between">
-          <CardDescription>{label}</CardDescription>
-          <span className="flex h-8 w-8 items-center justify-center rounded-lg bg-brand/10 text-brand">
-            <Icon className="h-4 w-4" />
-          </span>
-        </div>
-        <CardTitle className="text-3xl">{value}</CardTitle>
-      </CardHeader>
-    </Card>
+    <div className="rounded-xl border border-border/60 bg-card p-4">
+      <span className="flex size-9 items-center justify-center rounded-lg bg-brand/10 text-brand">
+        <Icon className="size-4" />
+      </span>
+      <p className="mt-3 text-sm text-muted-foreground">{label}</p>
+      <p className="mt-1 text-3xl font-semibold tracking-tight text-foreground">
+        {value}
+      </p>
+      <p className="mt-2 flex items-center gap-1 text-xs font-medium text-emerald-400">
+        <ArrowUpRight className="size-3.5" />
+        {delta}
+        <span className="font-normal text-muted-foreground">this month</span>
+      </p>
+    </div>
   );
 }
 
 function ChartCard({
   title,
+  icon: Icon,
   description,
   className,
   children,
 }: {
   title: string;
+  icon: LucideIcon;
   description?: string;
   className?: string;
   children: React.ReactNode;
 }) {
   return (
-    <Card className={className}>
-      <CardHeader>
-        <CardTitle>{title}</CardTitle>
-        {description ? (
-          <CardDescription>{description}</CardDescription>
-        ) : null}
-      </CardHeader>
-      <CardContent>{children}</CardContent>
-    </Card>
+    <section
+      className={cn(
+        "rounded-xl border border-border/60 bg-card p-4 sm:p-5",
+        className,
+      )}
+    >
+      <div className="mb-4 flex items-start justify-between gap-3">
+        <div>
+          <h2 className="flex items-center gap-2 text-sm font-semibold text-foreground">
+            <Icon className="size-4 text-brand" />
+            {title}
+          </h2>
+          {description ? (
+            <p className="mt-1 text-xs text-muted-foreground">{description}</p>
+          ) : null}
+        </div>
+      </div>
+      {children}
+    </section>
   );
 }
 
@@ -96,6 +108,9 @@ export default async function CrmPage() {
     redirect("/login");
   }
 
+  const now = new Date();
+  const since30 = new Date(now.getTime() - 30 * 24 * 60 * 60 * 1000);
+
   const [propertyRows, leadRows, transactionRows] = await Promise.all([
     db
       .select({
@@ -103,17 +118,23 @@ export default async function CrmPage() {
         price: properties.price,
         buyingPrice: properties.buyingPrice,
         status: properties.status,
+        createdAt: properties.createdAt,
       })
       .from(properties),
     db
-      .select({ source: leads.source, status: leads.status })
+      .select({
+        source: leads.source,
+        status: leads.status,
+        createdAt: leads.createdAt,
+      })
       .from(leads),
     db
       .select({
+        propertyId: transactions.propertyId,
         status: transactions.status,
         amount: transactions.amount,
         transactionDate: transactions.transactionDate,
-        propertyId: transactions.propertyId,
+        createdAt: transactions.createdAt,
       })
       .from(transactions),
   ]);
@@ -121,24 +142,16 @@ export default async function CrmPage() {
   const propertyCount = propertyRows.length;
   const leadCount = leadRows.length;
   const transactionCount = transactionRows.length;
+  const totalRevenue = transactionRows.reduce((sum, t) => sum + t.amount, 0);
 
-  const totalRevenue = transactionRows.reduce(
-    (sum, transaction) => sum + transaction.amount,
-    0,
-  );
+  const newProperties = propertyRows.filter(
+    (row) => row.createdAt >= since30,
+  ).length;
+  const newLeads = leadRows.filter((row) => row.createdAt >= since30).length;
+  const newTransactions = transactionRows.filter(
+    (row) => row.createdAt >= since30,
+  ).length;
 
-  const buyingPriceById = new Map(
-    propertyRows.map((property) => [property.id, property.buyingPrice]),
-  );
-
-  const realizedProfit = transactionRows.reduce((sum, transaction) => {
-    if (transaction.status !== "SOLD") return sum;
-    const buyingPrice = buyingPriceById.get(transaction.propertyId);
-    if (buyingPrice == null) return sum;
-    return sum + (transaction.amount - buyingPrice);
-  }, 0);
-
-  const now = new Date();
   const months: { key: string; label: string; revenue: number }[] = [];
   for (let i = 5; i >= 0; i -= 1) {
     const date = new Date(now.getFullYear(), now.getMonth() - i, 1);
@@ -159,6 +172,66 @@ export default async function CrmPage() {
     month: month.label,
     revenue: month.revenue,
   }));
+
+  const thisMonthKey = `${now.getFullYear()}-${String(now.getMonth() + 1).padStart(2, "0")}`;
+  const lastMonthDate = new Date(now.getFullYear(), now.getMonth() - 1, 1);
+  const lastMonthKey = `${lastMonthDate.getFullYear()}-${String(lastMonthDate.getMonth() + 1).padStart(2, "0")}`;
+  const revenueThisMonth = monthByKey.get(thisMonthKey)?.revenue ?? 0;
+  const revenueLastMonth = monthByKey.get(lastMonthKey)?.revenue ?? 0;
+  const revenueChange =
+    revenueLastMonth > 0
+      ? Math.round(
+          ((revenueThisMonth - revenueLastMonth) / revenueLastMonth) * 100,
+        )
+      : null;
+
+  const buyingPriceById = new Map(
+    propertyRows.map((property) => [property.id, property.buyingPrice]),
+  );
+
+  function soldProfit(transaction: {
+    status: string;
+    amount: number;
+    propertyId: string | null;
+  }) {
+    if (transaction.status !== "SOLD") return 0;
+    const buyingPrice = transaction.propertyId
+      ? buyingPriceById.get(transaction.propertyId)
+      : null;
+    if (buyingPrice == null) return 0;
+    return transaction.amount - buyingPrice;
+  }
+
+  const realizedProfit = transactionRows.reduce(
+    (sum, transaction) => sum + soldProfit(transaction),
+    0,
+  );
+  const soldCount = transactionRows.filter((t) => t.status === "SOLD").length;
+
+  const profitMonths = months.map((month) => ({ ...month, profit: 0 }));
+  const profitByKey = new Map(profitMonths.map((month) => [month.key, month]));
+  for (const transaction of transactionRows) {
+    if (transaction.status !== "SOLD") continue;
+    const buyingPrice = transaction.propertyId
+      ? buyingPriceById.get(transaction.propertyId)
+      : null;
+    if (buyingPrice == null) continue;
+    const date = transaction.transactionDate;
+    const key = `${date.getFullYear()}-${String(date.getMonth() + 1).padStart(2, "0")}`;
+    const month = profitByKey.get(key);
+    if (month) month.profit += transaction.amount - buyingPrice;
+  }
+  const profitByMonth = profitMonths.map((month) => ({
+    month: month.label,
+    profit: month.profit,
+  }));
+
+  const profitThisMonth = profitByKey.get(thisMonthKey)?.profit ?? 0;
+  const profitLastMonth = profitByKey.get(lastMonthKey)?.profit ?? 0;
+  const profitChange =
+    profitLastMonth > 0
+      ? Math.round(((profitThisMonth - profitLastMonth) / profitLastMonth) * 100)
+      : null;
 
   const transactionsByType = [
     {
@@ -187,54 +260,118 @@ export default async function CrmPage() {
     sourceCounts.set(lead.source, (sourceCounts.get(lead.source) ?? 0) + 1);
   }
   const leadsBySource = [...sourceCounts.entries()]
-    .map(([label, value]) => ({ label: label.replace(/_/g, " "), value }))
+    .map(([label, value]) => ({ label, value }))
     .sort((a, b) => b.value - a.value)
     .slice(0, 6);
 
-  const canCreate = canManageProperties(session.user.role);
-  const canRecordTransaction = canManageTransactions(session.user.role);
-  const canManageLead = canManageLeads(session.user.role);
+  const addNewItems: AddNewItem[] = [];
+  if (canManageProperties(session.user.role)) {
+    addNewItems.push({ href: "/crm/properties/new", label: "New listing" });
+  }
+  if (canManageLeads(session.user.role)) {
+    addNewItems.push({ href: "/crm/leads/new", label: "New lead" });
+  }
+  if (canManageTransactions(session.user.role)) {
+    addNewItems.push({
+      href: "/crm/transactions/new",
+      label: "New transaction",
+    });
+  }
+  if (session.user.role === "SUPER_ADMIN") {
+    addNewItems.push({ href: "/crm/users/new", label: "Invite user" });
+  }
 
   return (
-    <main className="mx-auto w-full max-w-6xl flex-1 px-6 py-10">
-      <h1 className="text-2xl font-semibold">
-        Welcome, {session.user.name}
-      </h1>
-      <p className="mt-1 text-sm text-muted-foreground">
-        {session.user.role?.replace(/_/g, " ")} · Bright Light Homes &amp;
-        Properties CRM
-      </p>
+    <main className="w-full flex-1 px-4 py-6 lg:px-6">
+      <div className="relative overflow-hidden rounded-2xl border border-border/60 bg-gradient-to-r from-card via-card to-brand/10 p-6 sm:p-8">
+        <div className="pointer-events-none absolute -right-16 -top-24 size-64 rounded-full bg-brand/10 blur-3xl" />
+        <div className="relative flex flex-col gap-5 md:flex-row md:items-center md:justify-between">
+          <div>
+            <p className="text-xs font-semibold uppercase tracking-[0.25em] text-brand">
+              Welcome back,
+            </p>
+            <h1 className="mt-2 text-3xl font-semibold tracking-tight text-foreground sm:text-4xl">
+              {session.user.name}
+            </h1>
+            <p className="mt-2 text-sm text-muted-foreground">
+              Here&apos;s what&apos;s happening with your business today.
+            </p>
+          </div>
+          <div className="w-full md:w-48">
+            <AddNewMenu items={addNewItems} />
+          </div>
+        </div>
+      </div>
 
-      <div className="mt-8 grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-5">
-        <StatCard label="Properties" value={propertyCount} icon={Building2} />
-        <StatCard label="Leads" value={leadCount} icon={Users} />
+      <div className="mt-5 grid grid-cols-2 gap-4 lg:grid-cols-3 xl:grid-cols-5">
+        <StatCard
+          label="Properties"
+          value={propertyCount}
+          icon={Building2}
+          delta={`+${newProperties}`}
+        />
+        <StatCard
+          label="Leads"
+          value={leadCount}
+          icon={Users}
+          delta={`+${newLeads}`}
+        />
         <StatCard
           label="Transactions"
           value={transactionCount}
           icon={Handshake}
+          delta={`+${newTransactions}`}
         />
         <StatCard
           label="Revenue"
           value={compactKES(totalRevenue)}
           icon={BadgeDollarSign}
+          delta={
+            revenueChange === null
+              ? compactKES(revenueThisMonth)
+              : `${revenueChange >= 0 ? "+" : ""}${revenueChange}%`
+          }
         />
         <StatCard
           label="Realized profit"
           value={compactKES(realizedProfit)}
           icon={TrendingUp}
+          delta={
+            profitChange === null
+              ? `${soldCount} sold`
+              : `${profitChange >= 0 ? "+" : ""}${profitChange}%`
+          }
         />
       </div>
 
-      <div className="mt-8 grid grid-cols-1 gap-5 lg:grid-cols-2">
+      <div className="mt-5 grid grid-cols-1 gap-5 lg:grid-cols-2">
         <ChartCard
           title="Revenue"
+          icon={BadgeDollarSign}
           description="Transaction value over the last 6 months"
-          className="lg:col-span-2"
         >
           <RevenueChart data={revenueByMonth} />
         </ChartCard>
 
-        <ChartCard title="Transactions" description="Sold vs rented">
+        <ChartCard
+          title="Realized profit"
+          icon={TrendingUp}
+          description="Profit from sold properties only (green) vs losses (red)"
+        >
+          {soldCount === 0 ? (
+            <p className="py-16 text-center text-sm text-muted-foreground">
+              No sold properties yet.
+            </p>
+          ) : (
+            <ProfitBarChart data={profitByMonth} />
+          )}
+        </ChartCard>
+
+        <ChartCard
+          title="Transactions"
+          icon={Handshake}
+          description="Sold vs rented"
+        >
           {transactionsByType.length === 0 ? (
             <p className="py-16 text-center text-sm text-muted-foreground">
               No transactions recorded yet.
@@ -244,7 +381,11 @@ export default async function CrmPage() {
           )}
         </ChartCard>
 
-        <ChartCard title="Properties by status">
+        <ChartCard
+          title="Properties by status"
+          icon={Building2}
+          description="Current listings"
+        >
           {propertiesByStatus.length === 0 ? (
             <p className="py-16 text-center text-sm text-muted-foreground">
               No properties yet.
@@ -256,6 +397,7 @@ export default async function CrmPage() {
 
         <ChartCard
           title="Leads by source"
+          icon={Users}
           description="Top sources"
           className="lg:col-span-2"
         >
@@ -267,27 +409,6 @@ export default async function CrmPage() {
             <CategoryBarChart data={leadsBySource} label="Leads" />
           )}
         </ChartCard>
-      </div>
-
-      <div className="mt-10 flex flex-wrap items-center gap-3">
-        {canCreate ? (
-          <Button asChild>
-            <Link href="/crm/properties/new">New listing</Link>
-          </Button>
-        ) : null}
-        {canRecordTransaction ? (
-          <Button asChild variant="outline">
-            <Link href="/crm/transactions/new">New transaction</Link>
-          </Button>
-        ) : null}
-        {canManageLead ? (
-          <Button asChild variant="outline">
-            <Link href="/crm/leads/new">New lead</Link>
-          </Button>
-        ) : null}
-        <Button asChild variant="outline">
-          <Link href="/crm/towers">View towers</Link>
-        </Button>
       </div>
     </main>
   );

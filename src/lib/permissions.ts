@@ -33,3 +33,7 @@ export function canManageTransactions(
 export function isAdmin(role: string | null | undefined): boolean {
   return role === "SUPER_ADMIN" || role === "DIRECTOR";
 }
+
+export function isSuperAdmin(role: string | null | undefined): boolean {
+  return role === "SUPER_ADMIN";
+}

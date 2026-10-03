@@ -153,9 +153,20 @@ export default async function TowerDetailPage({
                 <CardHeader className="pt-5">
                   <div className="flex items-center justify-between gap-3">
                     <CardTitle>{floor.name}</CardTitle>
-                    {floor.level != null ? (
-                      <Badge variant="outline">Level {floor.level}</Badge>
-                    ) : null}
+                    <div className="flex items-center gap-2">
+                      {floor.level != null ? (
+                        <Badge variant="outline">Level {floor.level}</Badge>
+                      ) : null}
+                      {canManage ? (
+                        <Button asChild variant="ghost" size="xs">
+                          <Link
+                            href={`/crm/towers/${tower.id}/floors/${floor.id}/edit`}
+                          >
+                            Edit
+                          </Link>
+                        </Button>
+                      ) : null}
+                    </div>
                   </div>
                   {floor.description ? (
                     <p className="text-sm text-muted-foreground">
@@ -190,9 +201,20 @@ export default async function TowerDetailPage({
                               </p>
                             ) : null}
                           </div>
-                          <Badge variant={stallVariant(stall.status)}>
-                            {stall.status.replace(/_/g, " ")}
-                          </Badge>
+                          <div className="flex items-center gap-2">
+                            <Badge variant={stallVariant(stall.status)}>
+                              {stall.status.replace(/_/g, " ")}
+                            </Badge>
+                            {canManage ? (
+                              <Button asChild variant="ghost" size="xs">
+                                <Link
+                                  href={`/crm/towers/${tower.id}/stalls/${stall.id}/edit`}
+                                >
+                                  Edit
+                                </Link>
+                              </Button>
+                            ) : null}
+                          </div>
                         </li>
                       ))}
                     </ul>

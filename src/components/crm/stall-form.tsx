@@ -2,7 +2,7 @@
 
 import { useState } from "react";
 import Link from "next/link";
-import { createStall } from "@/server/actions/tower-actions";
+import { createStall, updateStall } from "@/server/actions/tower-actions";
 import {
   STALL_STATUSES,
   type StallStatusValue,
@@ -18,6 +18,18 @@ import { ImageUploader } from "@/components/crm/image-uploader";
 
 type FloorOption = { id: string; name: string };
 
+export type StallFormInitial = {
+  id: string;
+  floorId: string;
+  code: string;
+  name: string | null;
+  status: StallStatusValue;
+  price: number | null;
+  area: number | null;
+  description: string | null;
+  images: string[] | null;
+};
+
 function toNumber(value: FormDataEntryValue | null): number | undefined {
   const raw = String(value ?? "").trim();
   if (raw === "") return undefined;
@@ -28,16 +40,23 @@ function toNumber(value: FormDataEntryValue | null): number | undefined {
 export function StallForm({
   towerId,
   floors,
+  stall,
 }: {
   towerId: string;
   floors: FloorOption[];
+  stall?: StallFormInitial;
 }) {
-  const [floorId, setFloorId] = useState(floors[0]?.id ?? "");
-  const [status, setStatus] = useState<StallStatusValue>("AVAILABLE");
-  const [images, setImages] = useState<string[]>([]);
+  const [floorId, setFloorId] = useState(
+    stall?.floorId ?? floors[0]?.id ?? "",
+  );
+  const [status, setStatus] = useState<StallStatusValue>(
+    stall?.status ?? "AVAILABLE",
+  );
+  const [images, setImages] = useState<string[]>(stall?.images ?? []);
   const [error, setError] = useState<string | null>(null);
   const [isPending, setIsPending] = useState(false);
 
+  const isEditing = Boolean(stall);
   const hasFloors = floors.length > 0;
 
   async function handleSubmit(event: React.FormEvent<HTMLFormElement>) {
@@ -51,8 +70,7 @@ export function StallForm({
 
     setIsPending(true);
     const formData = new FormData(event.currentTarget);
-
-    const result = await createStall({
+    const values = {
       towerId,
       floorId,
       code: String(formData.get("code") ?? ""),
@@ -62,7 +80,12 @@ export function StallForm({
       area: toNumber(formData.get("area")),
       description: String(formData.get("description") ?? ""),
       images,
-    });
+    };
+
+    const result =
+      isEditing && stall
+        ? await updateStall({ ...values, id: stall.id })
+        : await createStall(values);
 
     if (result?.error) {
       setError(result.error);
@@ -108,13 +131,19 @@ export function StallForm({
                 id="code"
                 name="code"
                 required
+                defaultValue={stall?.code ?? ""}
                 placeholder="A-01"
               />
             </div>
 
             <div className="flex flex-col gap-2">
               <Label htmlFor="name">Name</Label>
-              <Input id="name" name="name" placeholder="Optional" />
+              <Input
+                id="name"
+                name="name"
+                defaultValue={stall?.name ?? ""}
+                placeholder="Optional"
+              />
             </div>
 
             <div className="flex flex-col gap-2">
@@ -140,6 +169,7 @@ export function StallForm({
                 type="number"
                 min={0}
                 step={1}
+                defaultValue={stall?.price ?? ""}
               />
             </div>
 
@@ -151,13 +181,19 @@ export function StallForm({
                 type="number"
                 min={0}
                 step="any"
+                defaultValue={stall?.area ?? ""}
               />
             </div>
           </div>
 
           <div className="flex flex-col gap-2">
             <Label htmlFor="description">Description</Label>
-            <Textarea id="description" name="description" rows={3} />
+            <Textarea
+              id="description"
+              name="description"
+              rows={3}
+              defaultValue={stall?.description ?? ""}
+            />
           </div>
 
           <div className="flex flex-col gap-2">
@@ -173,7 +209,11 @@ export function StallForm({
 
           <div>
             <Button type="submit" disabled={isPending}>
-              {isPending ? "Creating…" : "Create stall"}
+              {isPending
+                ? "Saving…"
+                : isEditing
+                  ? "Save changes"
+                  : "Create stall"}
             </Button>
           </div>
         </form>

@@ -10,10 +10,14 @@ import { auditLogs, floors, stalls, towers } from "@/db/schema";
 import { canManageProperties } from "@/lib/permissions";
 import {
   floorInputSchema,
+  floorUpdateSchema,
   stallInputSchema,
+  stallUpdateSchema,
   towerInputSchema,
   type FloorFormInput,
+  type FloorUpdateInput,
   type StallFormInput,
+  type StallUpdateInput,
   type TowerFormInput,
 } from "@/lib/validations/tower";
 
@@ -152,4 +156,122 @@ export async function createStall(
 
   revalidatePath(`/crm/towers/${data.towerId}`);
   redirect(`/crm/towers/${data.towerId}`);
+}
+
+export async function updateFloor(
+  input: FloorUpdateInput,
+): Promise<TowerActionResult> {
+  const session = await getManager();
+
+  if (!session) {
+    return { error: "You do not have permission to manage floors." };
+  }
+
+  const parsed = floorUpdateSchema.safeParse(input);
+
+  if (!parsed.success) {
+    return { error: parsed.error.issues[0]?.message ?? "Invalid floor." };
+  }
+
+  const data = parsed.data;
+
+  const [floor] = await db
+    .select({ id: floors.id, towerId: floors.towerId })
+    .from(floors)
+    .where(eq(floors.id, data.id))
+    .limit(1);
+
+  if (!floor) {
+    return { error: "Floor not found." };
+  }
+
+  await db
+    .update(floors)
+    .set({
+      name: data.name,
+      level: data.level ?? null,
+      description: data.description || null,
+      images: data.images,
+      updatedAt: new Date(),
+    })
+    .where(eq(floors.id, data.id));
+
+  await db.insert(auditLogs).values({
+    userId: session.user.id,
+    action: "floor.update",
+    resource: "floor",
+    resourceId: data.id,
+    metadata: { towerId: floor.towerId, name: data.name },
+  });
+
+  revalidatePath(`/crm/towers/${floor.towerId}`);
+  redirect(`/crm/towers/${floor.towerId}`);
+}
+
+export async function updateStall(
+  input: StallUpdateInput,
+): Promise<TowerActionResult> {
+  const session = await getManager();
+
+  if (!session) {
+    return { error: "You do not have permission to manage stalls." };
+  }
+
+  const parsed = stallUpdateSchema.safeParse(input);
+
+  if (!parsed.success) {
+    return { error: parsed.error.issues[0]?.message ?? "Invalid stall." };
+  }
+
+  const data = parsed.data;
+
+  const [stall] = await db
+    .select({ id: stalls.id, towerId: stalls.towerId })
+    .from(stalls)
+    .where(eq(stalls.id, data.id))
+    .limit(1);
+
+  if (!stall) {
+    return { error: "Stall not found." };
+  }
+
+  const [floor] = await db
+    .select({ id: floors.id, towerId: floors.towerId })
+    .from(floors)
+    .where(eq(floors.id, data.floorId))
+    .limit(1);
+
+  if (!floor) {
+    return { error: "Floor not found." };
+  }
+
+  if (floor.towerId !== stall.towerId) {
+    return { error: "The selected floor does not belong to this tower." };
+  }
+
+  await db
+    .update(stalls)
+    .set({
+      floorId: floor.id,
+      code: data.code,
+      name: data.name || null,
+      status: data.status,
+      price: data.price === undefined ? null : Math.round(data.price),
+      area: data.area ?? null,
+      description: data.description || null,
+      images: data.images,
+      updatedAt: new Date(),
+    })
+    .where(eq(stalls.id, data.id));
+
+  await db.insert(auditLogs).values({
+    userId: session.user.id,
+    action: "stall.update",
+    resource: "stall",
+    resourceId: data.id,
+    metadata: { towerId: stall.towerId, code: data.code },
+  });
+
+  revalidatePath(`/crm/towers/${stall.towerId}`);
+  redirect(`/crm/towers/${stall.towerId}`);
 }

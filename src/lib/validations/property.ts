@@ -41,6 +41,12 @@ const optionalInt = z.preprocess(
   z.coerce.number().int().nonnegative().optional(),
 );
 
+const optionalUrl = z.preprocess(
+  (value) =>
+    value === "" || value === null || value === undefined ? undefined : value,
+  z.url("Enter a valid Google Maps link").max(500).optional(),
+);
+
 export const propertyInputSchema = z.object({
   title: z.string().trim().min(3, "Title must be at least 3 characters").max(200),
   description: z.string().trim().max(5000).optional(),
@@ -53,6 +59,7 @@ export const propertyInputSchema = z.object({
   town: z.string().trim().max(120).optional(),
   neighborhood: z.string().trim().max(120).optional(),
   address: z.string().trim().max(300).optional(),
+  mapUrl: optionalUrl,
   latitude: optionalNumber,
   longitude: optionalNumber,
   bedrooms: optionalInt,

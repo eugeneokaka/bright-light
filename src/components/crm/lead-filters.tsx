@@ -7,11 +7,7 @@ import { Card, CardContent } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { SelectField, type SelectFieldOption } from "@/components/select-field";
-import {
-  LEAD_PRIORITIES,
-  LEAD_SOURCES,
-  LEAD_STATUSES,
-} from "@/lib/validations/lead";
+import { LEAD_PRIORITIES, LEAD_STATUSES } from "@/lib/validations/lead";
 
 const ANY = "any";
 
@@ -104,14 +100,11 @@ export function LeadFilters({ agents }: { agents: SelectFieldOption[] }) {
 
             <div className="flex flex-col gap-2">
               <Label htmlFor="source">Source</Label>
-              <FilterSelect
+              <Input
+                id="source"
                 value={source}
-                onChange={setSource}
-                anyLabel="All sources"
-                options={LEAD_SOURCES.map((value) => ({
-                  value,
-                  label: value.replace(/_/g, " "),
-                }))}
+                onChange={(event) => setSource(event.target.value)}
+                placeholder="Any source"
               />
             </div>
 

@@ -55,6 +55,7 @@ export async function createProperty(
       town: data.town || null,
       neighborhood: data.neighborhood || null,
       address: data.address || null,
+      mapUrl: data.mapUrl || null,
       latitude: data.latitude ?? null,
       longitude: data.longitude ?? null,
       bedrooms: data.bedrooms ?? null,

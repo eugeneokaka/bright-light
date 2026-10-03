@@ -1,20 +1,22 @@
 import { z } from "zod";
 
-export const LEAD_SOURCES = [
-  "WEBSITE",
-  "PROPERTY_PAGE",
-  "PROJECT_PAGE",
-  "BLOG",
-  "CONTACT_FORM",
-  "SELL_WITH_US",
-  "BUY_WITH_US",
-  "WHATSAPP",
-  "ORGANIC_SEARCH",
-  "GOOGLE_ADS",
-  "META_ADS",
-  "REFERRAL",
-  "WALK_IN",
-  "PHONE_CALL",
+export const LEAD_TYPES = ["PERSON", "PROJECT"] as const;
+
+export const LEAD_SOURCE_SUGGESTIONS = [
+  "Website",
+  "Property page",
+  "Project page",
+  "Blog",
+  "Contact form",
+  "Sell with us",
+  "Buy with us",
+  "WhatsApp",
+  "Organic search",
+  "Google Ads",
+  "Meta Ads",
+  "Referral",
+  "Walk in",
+  "Phone call",
 ] as const;
 
 export const LEAD_STATUSES = [
@@ -32,17 +34,18 @@ export const LEAD_INTENTS = ["BUY", "RENT", "INVEST", "SELL"] as const;
 
 export const LEAD_PRIORITIES = ["LOW", "MEDIUM", "HIGH"] as const;
 
-export type LeadSourceValue = (typeof LEAD_SOURCES)[number];
+export type LeadTypeValue = (typeof LEAD_TYPES)[number];
 export type LeadStatusValue = (typeof LEAD_STATUSES)[number];
 export type LeadIntentValue = (typeof LEAD_INTENTS)[number];
 export type LeadPriorityValue = (typeof LEAD_PRIORITIES)[number];
 
 export const leadInputSchema = z.object({
   name: z.string().trim().min(2, "Name is required").max(200),
+  type: z.enum(LEAD_TYPES).default("PERSON"),
   phone: z.string().trim().min(7, "Phone number is required").max(32),
   email: z.string().trim().max(200).optional(),
   message: z.string().trim().max(2000).optional(),
-  source: z.enum(LEAD_SOURCES).default("WEBSITE"),
+  source: z.string().trim().min(1, "Source is required").max(100),
   status: z.enum(LEAD_STATUSES).default("NEW"),
   intent: z.enum(LEAD_INTENTS).optional(),
   priority: z.enum(LEAD_PRIORITIES).default("MEDIUM"),

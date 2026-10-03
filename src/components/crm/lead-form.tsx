@@ -5,12 +5,13 @@ import { createLead } from "@/server/actions/lead-actions";
 import {
   LEAD_INTENTS,
   LEAD_PRIORITIES,
-  LEAD_SOURCES,
+  LEAD_SOURCE_SUGGESTIONS,
   LEAD_STATUSES,
+  LEAD_TYPES,
   type LeadIntentValue,
   type LeadPriorityValue,
-  type LeadSourceValue,
   type LeadStatusValue,
+  type LeadTypeValue,
 } from "@/lib/validations/lead";
 import { Alert, AlertDescription } from "@/components/ui/alert";
 import { Button } from "@/components/ui/button";
@@ -31,7 +32,8 @@ export function LeadForm({
   agents: Option[];
   properties: Option[];
 }) {
-  const [source, setSource] = useState<LeadSourceValue>("WEBSITE");
+  const [type, setType] = useState<LeadTypeValue>("PERSON");
+  const [source, setSource] = useState("");
   const [status, setStatus] = useState<LeadStatusValue>("NEW");
   const [intent, setIntent] = useState<string>(NONE);
   const [priority, setPriority] = useState<LeadPriorityValue>("MEDIUM");
@@ -49,6 +51,7 @@ export function LeadForm({
 
     const result = await createLead({
       name: String(formData.get("name") ?? ""),
+      type,
       phone: String(formData.get("phone") ?? ""),
       email: String(formData.get("email") ?? ""),
       message: String(formData.get("message") ?? ""),
@@ -72,8 +75,27 @@ export function LeadForm({
         <form onSubmit={handleSubmit} className="flex flex-col gap-6 pt-2">
           <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
             <div className="flex flex-col gap-2">
-              <Label htmlFor="name">Name</Label>
-              <Input id="name" name="name" required minLength={2} />
+              <Label htmlFor="name">Customer / Project</Label>
+              <Input
+                id="name"
+                name="name"
+                required
+                minLength={2}
+                placeholder="Jane Doe or Riverside Apartments"
+              />
+            </div>
+
+            <div className="flex flex-col gap-2">
+              <Label htmlFor="type">Type</Label>
+              <SelectField
+                id="type"
+                value={type}
+                onValueChange={(value) => setType(value as LeadTypeValue)}
+                options={LEAD_TYPES.map((value) => ({
+                  value,
+                  label: value === "PERSON" ? "Person / client" : "Project",
+                }))}
+              />
             </div>
 
             <div className="flex flex-col gap-2">
@@ -99,15 +121,20 @@ export function LeadForm({
 
             <div className="flex flex-col gap-2">
               <Label htmlFor="source">Source</Label>
-              <SelectField
+              <Input
                 id="source"
+                name="source"
+                required
+                list="lead-source-suggestions"
                 value={source}
-                onValueChange={(value) => setSource(value as LeadSourceValue)}
-                options={LEAD_SOURCES.map((value) => ({
-                  value,
-                  label: value.replace(/_/g, " "),
-                }))}
+                onChange={(event) => setSource(event.target.value)}
+                placeholder="e.g. Referral, Instagram, Walk in"
               />
+              <datalist id="lead-source-suggestions">
+                {LEAD_SOURCE_SUGGESTIONS.map((value) => (
+                  <option key={value} value={value} />
+                ))}
+              </datalist>
             </div>
 
             <div className="flex flex-col gap-2">
